@@ -1,16 +1,12 @@
 const {config, mysql, query} = require("../db/connect");
+const path = require("path");
+
 
 const addSong = async (req, res) => {
-    // Structure which we will receive
-    // {
-    // name: 'f safknfc ',
-    // rls_date: '1919-05-20',
-    // cover_img: 'Screenshot 2022-05-24 215704.png',
-    // artists_list: [ '', '1', '3' ],
-    // submit: 'Submit'
-    // }
+    console.log(req.body);
+    let {name: name, rls_date: rls_date, artists_list: artists_list} = req.body;
+    const file = req.file;
 
-    let {name: name, rls_date: rls_date, cover_img: cover_img, artists_list: artists_list} = req.body;
     let artists = "";
     for(let i=0; i<artists_list.length; i++) {
         let s = artists_list[i];
@@ -19,10 +15,12 @@ const addSong = async (req, res) => {
         }
         artists += artists_list[i] + ", ";
     }
-
-    let sql = `INSERT INTO song(name, rls_date, cover_img, artists, id) VALUES ('${name}', '${rls_date}', '${cover_img}', '${artists}', '')`;
+    const filename = file.fieldname + '-' + file.originalname.replace(" ", "_");
+    var imgsrc = 'http://localhost:8080/app/upload/' + filename;
+    let sql = `INSERT INTO song(name, rls_date, cover_img, artists, id) VALUES ('${name}', '${rls_date}', '${imgsrc}', '${artists}', '')`;
     const rows = await query(sql);
+    var id = rows.insertId;
     res.send("Song Added Successfully...");
 };
 
-module.exports = {config, mysql, query, addSong};
+module.exports = {addSong};

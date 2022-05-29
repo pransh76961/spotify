@@ -11,7 +11,6 @@ const getArtistList = async (req, res) => {
     let sql = `select name, id from artist`;
     const rows = await query(sql);
     return res.json(rows);
-    // return rows;
 };
 
 module.exports = {addArtist, getArtistList};
