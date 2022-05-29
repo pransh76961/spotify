@@ -1,42 +1,28 @@
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const mysql = require("mysql2");
+const path = require("path");
+var cors = require('cors')
 
 require("dotenv").config();
 const user = require("./routes/user");
 const artist = require("./routes/artist");
+const song = require('./routes/song');
 
-// const {db1, createDb} = require("./db/initializeDb");
-const {db, userTable} = require("./db/connect");
-
+const {config, mysql} = require("./db/connect");
 
 
 // middleware
+app.use(cors());
+app.use('/app', express.static(path.join(__dirname, "/view")));
 app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 
 
 // routes
-// app.get("/createdb", createDb);
-// app.get("/createUserTable", userTable);
 app.use('/app', user);
 app.use('/app', artist);
+app.use('/app', song);
 
 const port = process.env.PORT || 8080;
-
-const start = async () => {
-    try {
-        await db.connect((err) => {
-            if(err) {
-                throw err;
-            }
-            console.log("Mysql connected....");
-        });
-        app.listen(port, console.log(`Server is running on port ${port}`));
-    } catch (error) {
-        console.log(error);
-    }
-}
-
-start()
+app.listen(port, console.log(`Server is running on port ${port}`));
