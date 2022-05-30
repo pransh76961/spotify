@@ -22,7 +22,6 @@ app.use(express.json())
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/app/upload', express.static('upload'));
 
-
 // routes
 app.use('/app', user);
 app.use('/app', artist);

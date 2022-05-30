@@ -1,7 +1,7 @@
 const {config, mysql, query} = require("../db/connect");
 
 const signup = async (req, res)=> {
-    let sql = `insert into users (email, password, phone) values ('${req.body.email}', '${req.body.password}', '${req.body.mobile}')`;
+    let sql = `insert into users (email, password, phone, user_id) values ('${req.body.email}', '${req.body.password}', '${req.body.mobile}', '')`;
     const rows = await query(sql);
     console.log(rows);
     res.send("Data inserted successfully");
